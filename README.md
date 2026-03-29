@@ -60,7 +60,7 @@ cd RealEstate
 
 ### 2. Backend setup
 
-Create `api/.env`:
+Copy `api/.env.example` to `api/.env` and fill in your values:
 
 ```env
 DATABASE_URL="your_mongodb_connection_string"
@@ -83,7 +83,7 @@ npm run dev
 
 ### 3. Frontend setup
 
-Create `Frontend/.env`:
+Copy `Frontend/.env.example` to `Frontend/.env` and fill in your values:
 
 ```env
 VITE_API_BASE_URL="http://localhost:8800"
@@ -101,7 +101,7 @@ npm run dev
 
 ### 4. Socket server setup
 
-Create `socket/.env`:
+Copy `socket/.env.example` to `socket/.env`:
 
 ```env
 PORT=4000
@@ -138,5 +138,4 @@ To enable payments:
 - MongoDB Atlas is recommended if local MongoDB replica set setup is not available.
 - Cloudinary upload presets must be valid for avatar and property image uploads to work.
 - The backend uses protected routes for post creation, editing, saving, chat, and profile operations.
-
 
