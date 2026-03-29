@@ -11,6 +11,7 @@ const Navbar = () => {
   const fetch = useNotificationStore((state) => state.fetch);
 
   useEffect(() => {
+    // Notifications only matter once we know who is signed in.
     if (currentUser) {
       fetch();
     }
@@ -55,6 +56,7 @@ const Navbar = () => {
           />
         </div>
         <div className={open ? "menu active" : "menu"}>
+          {/* Closing the drawer on navigation makes the mobile menu feel less sticky. */}
           <Link to="/" onClick={() => setOpen(false)}>
             Home
           </Link>

@@ -15,10 +15,12 @@ import cors from "cors";
 
 const app = express();
 
+// Parse JSON bodies and auth cookies before requests hit the route handlers.
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 
+// Keep route prefixes grouped by feature so the API stays easy to scan.
 app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
 app.use("/api/posts", postRoute);

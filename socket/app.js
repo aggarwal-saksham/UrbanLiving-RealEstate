@@ -3,6 +3,7 @@ import { Server } from "socket.io";
 
 dotenv.config();
 
+// The socket server stays intentionally small: connect users, relay messages, clean up.
 const io = new Server({
   cors: {
     origin: process.env.FRONTEND_URL || "http://localhost:5173",
@@ -14,6 +15,7 @@ let onlineUser = [];
 const addUser = (userId, socketId) => {
   const userExists = onlineUser.find((user) => user.userId === userId);
 
+  // One active socket per user is enough for this simple presence model.
   if (!userExists) {
     onlineUser.push({ userId, socketId });
   }
@@ -36,6 +38,7 @@ io.on("connection", (socket) => {
     const receiver = getUser(receiverId);
 
     if (receiver?.socketId) {
+      // Only emit when the receiver is online; offline persistence is handled elsewhere.
       io.to(receiver.socketId).emit("getMessage", data);
     }
   });

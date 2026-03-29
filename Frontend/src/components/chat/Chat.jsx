@@ -17,14 +17,17 @@ const Chat = ({ chats: initialChats = [], autoOpenUserId }) => {
   const chatRef = useRef(chat);
 
   useEffect(() => {
+    // The API can occasionally hand back sparse entries, so we sanitize once here.
     setChats(initialChats.filter(Boolean));
   }, [initialChats]);
 
   useEffect(() => {
+    // We keep a ref in sync so socket handlers can read the latest open chat.
     chatRef.current = chat;
   }, [chat]);
 
   useEffect(() => {
+    // Auto-scroll to the newest message whenever the thread grows.
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chat?.messages]);
 
@@ -33,6 +36,7 @@ const Chat = ({ chats: initialChats = [], autoOpenUserId }) => {
       const res = await apiRequest("/chats/" + id);
 
       if (!res.data.seenBy.includes(currentUser.id)) {
+        // Mark the thread as read as soon as the user actually opens it.
         await apiRequest.put("/chats/read/" + id);
         decrease();
       }
@@ -57,6 +61,7 @@ const Chat = ({ chats: initialChats = [], autoOpenUserId }) => {
       }
 
       try {
+        // If a thread does not exist yet, create it quietly and open it right away.
         const res = await apiRequest.post("/chats", {
           receiverId: autoOpenUserId,
         });
@@ -132,6 +137,7 @@ const Chat = ({ chats: initialChats = [], autoOpenUserId }) => {
         const chatExists = prevChats.some((item) => item.id === data.chatId);
 
         if (chatExists) {
+          // Refresh the preview so the list stays useful even before opening the chat.
           return prevChats.map((item) =>
             item.id === data.chatId
               ? {
@@ -177,6 +183,7 @@ const Chat = ({ chats: initialChats = [], autoOpenUserId }) => {
     chats.filter(Boolean).forEach((item) => {
       if (!item?.receiver?.id) return;
 
+      // A normalized key prevents the same two people from showing up twice.
       const uniqueKey =
         currentUser.id < item.receiver.id
           ? `${currentUser.id}_${item.receiver.id}`
@@ -248,6 +255,7 @@ const Chat = ({ chats: initialChats = [], autoOpenUserId }) => {
             <textarea
               name="text"
               onKeyDown={(e) => {
+                // Enter sends, Shift+Enter gives the user a newline.
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
                   e.target.form.requestSubmit();

@@ -28,6 +28,7 @@ const ContactPage = () => {
             className="responsive-cell-block wk-tab-12 wk-mobile-12 wk-desk-7 wk-ipadp-10 line"
             id="i69b"
           >
+            {/* This is still a presentational form, so the button stays non-submitting for now. */}
             <form className="form-box">
               <div className="container-block form-wrapper">
                 <div className="responsive-container-block">

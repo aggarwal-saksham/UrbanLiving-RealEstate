@@ -17,6 +17,7 @@ function Card({
   showEdit = false,
 }) {
   const isComingSoon = item.comingSoon;
+
   const getAvailableInText = () => {
     if (!item.availableFrom) return null;
 
@@ -53,6 +54,7 @@ function Card({
 
       <Link to={`/${item.id}`} className="imageContainer">
         <img src={item.images[0]} alt={item.title} />
+        {/* Show a soft heads-up for listings that are not available just yet. */}
         {availableInText && <span className="soonTag">{availableInText}</span>}
         {item.isBought && <div className="soldBanner">SOLD</div>}
       </Link>

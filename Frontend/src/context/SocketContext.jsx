@@ -9,6 +9,7 @@ export const SocketContextProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
+    // Keep a single shared socket connection for the whole app session.
     const socketUrl = import.meta.env.VITE_SOCKET_URL || "http://localhost:4000";
     const socketInstance = io(socketUrl);
 
@@ -20,6 +21,7 @@ export const SocketContextProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
+    // Let the socket server know who just came online after auth state settles.
     currentUser && socket?.emit("newUser", currentUser.id);
   }, [currentUser, socket]);
   return (
