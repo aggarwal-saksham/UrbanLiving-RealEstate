@@ -1,28 +1,30 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "./navbar.scss";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { useNotificationStore } from "../../lib/notificationStore";
+
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const { currentUser } = useContext(AuthContext);
 
   const fetch = useNotificationStore((state) => state.fetch);
-  const number = useNotificationStore((state) => state.number);
 
-  fetch();
+  useEffect(() => {
+    if (currentUser) {
+      fetch();
+    }
+  }, [currentUser, fetch]);
 
   return (
     <nav>
       <div className="left">
-        <a href="/" className="logo">
+        <Link to="/" className="logo" onClick={() => setOpen(false)}>
           <img src="/logo.png" alt="" />
           <span>UrbanLiving</span>
-        </a>
-        <a href="/">Home</a>
-        {/* <a href="/">About</a> */}
-        <a href="/contact">Contact</a>
-        {/* <a href="/">Agents</a> */}
+        </Link>
+        <Link to="/">Home</Link>
+        <Link to="/contact">Contact</Link>
       </div>
       <div className="right">
         {currentUser ? (
@@ -36,10 +38,10 @@ const Navbar = () => {
           </div>
         ) : (
           <>
-            <a href="/login">Sign in</a>
-            <a href="/register" className="register">
+            <Link to="/login">Sign in</Link>
+            <Link to="/register" className="register">
               Signup
-            </a>
+            </Link>
           </>
         )}
 
@@ -53,12 +55,22 @@ const Navbar = () => {
           />
         </div>
         <div className={open ? "menu active" : "menu"}>
-          <a href="/">Home</a>
-          {/* <a href="/">About</a> */}
-          <a href="/contact">Contact</a>
-          {/* <a href="/">Agents</a> */}
-          <a href="/login">Sign in</a>
-          <a href="/register">Sign up</a>
+          <Link to="/" onClick={() => setOpen(false)}>
+            Home
+          </Link>
+          <Link to="/contact" onClick={() => setOpen(false)}>
+            Contact
+          </Link>
+          {!currentUser && (
+            <>
+              <Link to="/login" onClick={() => setOpen(false)}>
+                Sign in
+              </Link>
+              <Link to="/register" onClick={() => setOpen(false)}>
+                Sign up
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </nav>
