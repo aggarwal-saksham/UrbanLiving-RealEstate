@@ -1,0 +1,56 @@
+.comparePage {
+    padding: 40px;
+    background-color: #fcf5f3;
+    font-family: 'Segoe UI', sans-serif;
+  
+    h1 {
+      font-size: 32px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: #333;
+    }
+  
+    .compareTable {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+  
+      .compareRow {
+        display: flex;
+        gap: 16px;
+        align-items: stretch;
+  
+        .compareLabel {
+          flex: 1;
+          font-weight: 600;
+          color: #444;
+          background-color: #fece51;
+          padding: 14px;
+          border-radius: 10px;
+          min-width: 180px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+        }
+  
+        .compareCell {
+          flex: 1;
+          background-color: #fff;
+          border: 1px solid #ddd;
+          padding: 14px;
+          border-radius: 10px;
+          min-width: 180px;
+          text-align: center;
+          transition: background-color 0.3s ease, border 0.3s ease;
+  
+          &.highlight {
+            background-color: #fff7e0;
+            border: 2px solid #fece51;
+            font-weight: 600;
+          }
+        }
+      }
+    }
+  }
+  
