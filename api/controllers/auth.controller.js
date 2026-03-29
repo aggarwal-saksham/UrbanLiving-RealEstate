@@ -27,9 +27,6 @@ export const register = async (req, res) => {
         password: hashedPassword,
       },
     });
-
-    console.log(newUser);
-
     // Generate JWT token
     const age = 1000 * 60 * 60 * 24 * 7; // 7 days expiration
     const token = jwt.sign(
@@ -54,7 +51,7 @@ export const register = async (req, res) => {
       .status(201)
       .json({ message: "User created successfully!", userInfo: newUser });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     if (error.code === "P2002") {
       return res
         .status(409)
@@ -118,7 +115,7 @@ export const login = async (req, res) => {
       .status(200)
       .json(userInfo);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500).json({ message: "We couldn't log you in right now." });
   }
 };
