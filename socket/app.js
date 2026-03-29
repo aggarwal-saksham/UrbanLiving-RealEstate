@@ -1,7 +1,4 @@
-import dotenv from "dotenv";
 import { Server } from "socket.io";
-
-dotenv.config();
 
 // The socket server stays intentionally small: connect users, relay messages, clean up.
 const io = new Server({
