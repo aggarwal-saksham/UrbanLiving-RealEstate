@@ -18,6 +18,17 @@ const clientOrigins = (process.env.CLIENT_URL || "")
   .split(",")
   .map((origin) => origin.trim())
   .filter(Boolean);
+const isAllowedOrigin = (origin) => {
+  if (!origin) return true;
+  if (clientOrigins.includes(origin)) return true;
+
+  try {
+    const { hostname } = new URL(origin);
+    return hostname === "localhost" || hostname.endsWith(".vercel.app");
+  } catch {
+    return false;
+  }
+};
 
 // Parse JSON bodies and auth cookies before requests hit the route handlers.
 app.use(express.json());
@@ -26,7 +37,7 @@ app.set("trust proxy", 1);
 app.use(
   cors({
     origin(origin, callback) {
-      if (!origin || clientOrigins.length === 0 || clientOrigins.includes(origin)) {
+      if (clientOrigins.length === 0 || isAllowedOrigin(origin)) {
         return callback(null, true);
       }
 

@@ -10,8 +10,12 @@ export const SocketContextProvider = ({ children }) => {
 
   useEffect(() => {
     const socketUrl = import.meta.env.VITE_SOCKET_URL;
+    const isProduction = import.meta.env.PROD;
+    const isLocalSocketUrl =
+      socketUrl &&
+      /^(https?:\/\/)?(localhost|127\.0\.0\.1)(:\d+)?/i.test(socketUrl);
 
-    if (!socketUrl) {
+    if (!socketUrl || (isProduction && isLocalSocketUrl)) {
       setSocket(null);
       return undefined;
     }
