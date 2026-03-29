@@ -14,11 +14,31 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 
 const app = express();
+const clientOrigins = (process.env.CLIENT_URL || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 
 // Parse JSON bodies and auth cookies before requests hit the route handlers.
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
+app.set("trust proxy", 1);
+app.use(
+  cors({
+    origin(origin, callback) {
+      if (!origin || clientOrigins.length === 0 || clientOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("CORS origin is not allowed."));
+    },
+    credentials: true,
+  })
+);
+
+app.get("/", (_req, res) => {
+  res.status(200).json({ status: "ok", service: "api" });
+});
 
 // Keep route prefixes grouped by feature so the API stays easy to scan.
 app.use("/api/auth", authRoute);
@@ -33,3 +53,5 @@ const PORT = process.env.PORT || 8800;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+export default app;

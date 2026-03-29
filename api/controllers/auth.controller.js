@@ -2,6 +2,17 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import prisma from "../lib/prisma.js";
 
+const getCookieOptions = (maxAge) => {
+  const isProduction = process.env.NODE_ENV === "production";
+
+  return {
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
+    maxAge,
+  };
+};
+
 export const register = async (req, res) => {
   // db operations
   const { username, email, password } = req.body;
@@ -42,12 +53,7 @@ export const register = async (req, res) => {
 
     // Set the JWT token in a cookie
     res
-      .cookie("token", token, {
-        httpOnly: true,
-        secure: false, // Only secure cookies in production (HTTPS)
-        sameSite: "lax", // Important for cross-origin requests
-        maxAge: age, // Set the cookie expiration time
-      })
+      .cookie("token", token, getCookieOptions(age))
       .status(201)
       .json({ message: "User created successfully!", userInfo: newUser });
   } catch (error) {
@@ -106,12 +112,7 @@ export const login = async (req, res) => {
 
     // Set the JWT token in a cookie
     res
-      .cookie("token", token, {
-        httpOnly: true,
-        secure: false, // Only secure cookies in production (HTTPS)
-        sameSite: "lax", // Important for cross-origin requests
-        maxAge: age, // Set the cookie expiration time
-      })
+      .cookie("token", token, getCookieOptions(age))
       .status(200)
       .json(userInfo);
   } catch (error) {
@@ -121,5 +122,8 @@ export const login = async (req, res) => {
 };
 export const logout = (req, res) => {
   //db operations
-  res.clearCookie("token").status(200).json({ message: "Logout Successful" });
+  res
+    .clearCookie("token", getCookieOptions(0))
+    .status(200)
+    .json({ message: "Logout Successful" });
 };

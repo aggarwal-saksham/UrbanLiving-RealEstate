@@ -9,8 +9,14 @@ export const SocketContextProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
+    const socketUrl = import.meta.env.VITE_SOCKET_URL;
+
+    if (!socketUrl) {
+      setSocket(null);
+      return undefined;
+    }
+
     // Keep a single shared socket connection for the whole app session.
-    const socketUrl = import.meta.env.VITE_SOCKET_URL || "http://localhost:4000";
     const socketInstance = io(socketUrl);
 
     setSocket(socketInstance);
