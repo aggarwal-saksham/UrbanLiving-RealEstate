@@ -49,6 +49,32 @@ RealEstate/
 └── README.md
 ```
 
+## Screenshots
+
+### 1. Signup / Register
+
+![Signup page](screenshots/signup.png)
+
+### 2. Property Search & Listings
+
+![Search results and map](screenshots/listings.png)
+
+### 3. Add New Property Post
+
+![Add new property listing](screenshots/add_listing.png)
+
+### 4. Compare Properties
+
+![Compare properties view](screenshots/compare.png)
+
+### 5. Payment Checkout
+
+![Payment flow with Razorpay](screenshots/payment.png)
+
+### 6. Chat Interface
+
+![Real-time buyer-seller chat](screenshots/chat.png)
+
 ## Setup Instructions
 
 ### 1. Clone the repository
